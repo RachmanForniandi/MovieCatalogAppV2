@@ -1,0 +1,79 @@
+package com.example.user.moviecatalogappv2.adapter;
+
+import android.support.annotation.NonNull;
+import android.support.v7.widget.RecyclerView;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.ImageView;
+import android.widget.TextView;
+
+import com.example.user.moviecatalogappv2.MVP_Core.model.upcoming_data.ResultsItem;
+import com.example.user.moviecatalogappv2.R;
+
+import java.util.ArrayList;
+import java.util.List;
+
+import butterknife.BindView;
+import butterknife.ButterKnife;
+
+public class SearchAdapter extends RecyclerView.Adapter<SearchAdapter.SearchViewHolder> {
+
+    private List<ResultsItem> list = new ArrayList<>();
+
+    public SearchAdapter(){
+
+    }
+
+    public void replaceAll(List<ResultsItem> items){
+        list.clear();
+        list = items;
+        notifyDataSetChanged();
+    }
+
+    @Override
+    public SearchViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+        return new SearchViewHolder(
+                LayoutInflater.from(parent.getContext()).inflate(R.layout.activity_main_item,
+                        parent,false)
+        );
+    }
+
+    @Override
+    public void onBindViewHolder(SearchViewHolder holder, int position) {
+        holder.bind(list.get(position));
+    }
+
+    public class SearchViewHolder extends RecyclerView.ViewHolder{
+
+        @BindView(R.id.img_poster)
+        ImageView imgPoster;
+
+        @BindView(R.id.txtView_title)
+        TextView lblTextTitle;
+
+        @BindView(R.id.txtView_overview)
+        TextView lblTextOverview;
+
+        @BindView(R.id.txtView_release_date)
+        TextView lblTextReleaseDate;
+
+        public SearchViewHolder (View itemView){
+            super(itemView);
+
+            ButterKnife.bind(this,itemView);
+        }
+
+
+        public void bind(ResultsItem item) {
+            lblTextTitle.setText(item.getTitle());
+            lblTextOverview.setText(item.getOverview());
+            lblTextReleaseDate.setText(item.getReleaseDate());
+        }
+    }
+
+    @Override
+    public int getItemCount() {
+        return list.size();
+    }
+}
