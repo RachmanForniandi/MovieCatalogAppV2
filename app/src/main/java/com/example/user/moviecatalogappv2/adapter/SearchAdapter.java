@@ -8,7 +8,7 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.example.user.moviecatalogappv2.MVP_Core.model.upcoming_data.ResultsItem;
+import com.example.user.moviecatalogappv2.MVP_Core.model.search_data.ResultsItem;
 import com.example.user.moviecatalogappv2.R;
 
 import java.util.ArrayList;
@@ -43,6 +43,8 @@ public class SearchAdapter extends RecyclerView.Adapter<SearchAdapter.SearchView
     public void onBindViewHolder(SearchViewHolder holder, int position) {
         holder.bind(list.get(position));
     }
+
+
 
     public class SearchViewHolder extends RecyclerView.ViewHolder{
 
