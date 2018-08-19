@@ -12,6 +12,7 @@ import com.example.user.moviecatalogappv2.MVP_Core.MainPresenter;
 import com.example.user.moviecatalogappv2.MVP_Core.MainView;
 import com.example.user.moviecatalogappv2.MVP_Core.model.search_data.ResultsItem;
 import com.example.user.moviecatalogappv2.adapter.SearchAdapter;
+import com.example.user.moviecatalogappv2.utils.DateTime;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -60,9 +61,9 @@ public class MainActivity extends AppCompatActivity implements MainView{
         list.clear();
         for (int i =0; i <= 10; i++){
             ResultsItem perItem = new ResultsItem();
-            perItem.setTitle("Title" + i);
-            perItem.setOverview("OverView" + i);
-            perItem.setReleaseDate("2017-04-27");
+            perItem.setTitle("This is very very very long movie title that you can read" + i);
+            perItem.setOverview("This is very very very long movie overview that you can read" + i);
+            perItem.setReleaseDate(DateTime.getLongDate("2017-04-27"+i));
             list.add(perItem);
         }
         searchAdapter.replaceAll(list);
