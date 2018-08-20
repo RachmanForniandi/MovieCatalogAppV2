@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="horizontal"
+    android:padding="@dimen/margin_clear_space">
+
+    <ImageView
+        android:id="@+id/img_poster"
+        android:layout_width="45dp"
+        android:layout_height="68dp"
+        android:scaleType="centerCrop"
+        android:src="@drawable/sampleholder"/>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:paddingLeft="@dimen/margin_spacing">
+
+        <com.example.user.moviecatalogappv2.utils.CustomTextView
+            android:id="@+id/txtView_title"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:ellipsize="marquee"
+            android:singleLine="true"
+            android:text="Captain America: Civil War"
+            android:textSize="@dimen/txt_title"
+            app:fontName="alanya.regular.ttf"/>
+
+        <com.example.user.moviecatalogappv2.utils.CustomTextView
+            android:id="@+id/txtView_overview"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:ellipsize="marquee"
+            android:singleLine="true"
+            android:text="Following the events of Age of Ultron, the collective governments"
+            android:textSize="@dimen/txt_subheading"
+            app:fontName="roboto-condensed.light.ttf"/>
+
+        <TextView
+            android:id="@+id/txtView_release_date"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/margin_spacing"
+            android:text="Wednesday, Apr 27, 2016"
+            android:textSize="@dimen/txt_caption"/>
+
+    </LinearLayout>
+
+</LinearLayout>
