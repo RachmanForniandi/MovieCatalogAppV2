@@ -15,6 +15,7 @@ import com.example.user.moviecatalogappv2.BuildConfig;
 import com.example.user.moviecatalogappv2.DetailActivity;
 import com.example.user.moviecatalogappv2.MVP_Core.model.search_data.ResultsItem;
 import com.example.user.moviecatalogappv2.R;
+import com.example.user.moviecatalogappv2.utils.CustomTextView;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -57,7 +58,7 @@ public class SearchAdapter extends RecyclerView.Adapter<SearchAdapter.SearchView
         ImageView imgPoster;
 
         @BindView(R.id.txtView_title)
-        TextView lblTextTitle;
+        CustomTextView lblTextTitle;
 
         @BindView(R.id.txtView_overview)
         TextView lblTextOverview;
