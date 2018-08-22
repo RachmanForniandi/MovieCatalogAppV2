@@ -1,5 +1,6 @@
 package com.example.user.moviecatalogappv2.adapter;
 
+import android.content.Intent;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -11,6 +12,7 @@ import android.widget.TextView;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
 import com.example.user.moviecatalogappv2.BuildConfig;
+import com.example.user.moviecatalogappv2.DetailActivity;
 import com.example.user.moviecatalogappv2.MVP_Core.model.search_data.ResultsItem;
 import com.example.user.moviecatalogappv2.R;
 
@@ -75,13 +77,19 @@ public class SearchAdapter extends RecyclerView.Adapter<SearchAdapter.SearchView
             lblTextOverview.setText(item.getOverview());
             lblTextReleaseDate.setText(item.getReleaseDate());
             Glide.with(itemView.getContext())
-                    .load(BuildConfig.BASE_URL_IMAGE+"w45"+item.getPosterPath())
+                    .load(BuildConfig.BASE_URL_IMAGE + "w45" +item.getPosterPath())
                     .apply(new RequestOptions()
                         .placeholder(R.drawable.sampleholder)
                         .centerCrop())
                     .into(imgPoster);
 
-
+            itemView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Intent toDetail = new Intent(itemView.getContext(), DetailActivity.class);
+                    itemView.getContext().startActivity(toDetail);
+                }
+            });
         }
     }
 
