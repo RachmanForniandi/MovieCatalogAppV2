@@ -16,6 +16,7 @@ import com.example.user.moviecatalogappv2.DetailActivity;
 import com.example.user.moviecatalogappv2.MVP_Core.model.search_data.ResultsItem;
 import com.example.user.moviecatalogappv2.R;
 import com.example.user.moviecatalogappv2.utils.CustomTextView;
+import com.example.user.moviecatalogappv2.utils.DateTime;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -31,9 +32,19 @@ public class SearchAdapter extends RecyclerView.Adapter<SearchAdapter.SearchView
 
     }
 
+    public void clearAll(){
+        list.clear();
+        notifyDataSetChanged();
+    }
+
     public void replaceAll(List<ResultsItem> items){
         list.clear();
         list = items;
+        notifyDataSetChanged();
+    }
+
+    public void updateData(List<ResultsItem> items){
+        list.addAll(items);
         notifyDataSetChanged();
     }
 
@@ -76,7 +87,7 @@ public class SearchAdapter extends RecyclerView.Adapter<SearchAdapter.SearchView
         public void bind(ResultsItem item) {
             lblTextTitle.setText(item.getTitle());
             lblTextOverview.setText(item.getOverview());
-            lblTextReleaseDate.setText(item.getReleaseDate());
+            lblTextReleaseDate.setText(DateTime.getLongDate(item.getReleaseDate()));
             Glide.with(itemView.getContext())
                     .load(BuildConfig.BASE_URL_IMAGE + "w45" +item.getPosterPath())
                     .apply(new RequestOptions()

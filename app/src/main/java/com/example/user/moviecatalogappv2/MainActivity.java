@@ -6,13 +6,13 @@ import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
-import android.widget.Button;
-import android.widget.EditText;
-import android.widget.Toast;
 
+import android.widget.Toast;
+import com.example.user.moviecatalogappv2.API.APIResponder;
 import com.example.user.moviecatalogappv2.MVP_Core.MainPresenter;
 import com.example.user.moviecatalogappv2.MVP_Core.MainView;
 import com.example.user.moviecatalogappv2.MVP_Core.model.search_data.ResultsItem;
+import com.example.user.moviecatalogappv2.MVP_Core.model.search_data.SearchModel;
 import com.example.user.moviecatalogappv2.adapter.SearchAdapter;
 import com.example.user.moviecatalogappv2.utils.DateTime;
 import com.mancj.materialsearchbar.MaterialSearchBar;
@@ -23,7 +23,11 @@ import java.util.List;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
-import static android.support.v7.widget.DividerItemDecoration.*;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
+
+import static android.support.v7.widget.DividerItemDecoration.VERTICAL;
 
 public class MainActivity extends AppCompatActivity implements MainView, MaterialSearchBar.OnSearchActionListener{
 
@@ -39,6 +43,10 @@ public class MainActivity extends AppCompatActivity implements MainView, Materia
     private SearchAdapter searchAdapter;
     private List<ResultsItem> list = new ArrayList<>();
 
+    private Call<SearchModel> apiCall;
+    private APIResponder apiResponder;
+    private int resumePage = 1;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -46,12 +54,21 @@ public class MainActivity extends AppCompatActivity implements MainView, Materia
         ButterKnife.bind(this);
         setSupportActionBar(toolbar);
         searchBar.setOnSearchActionListener(this);
+        
+        apiResponder = new APIResponder();
 
         MainPresenter presenter = new MainPresenter(this);
 
         buildList();
-        loadFakeData();
+        loadData();
     }
+
+    @Override
+    protected void onDestroy(){
+        super.onDestroy();
+        if (apiCall != null)apiCall.cancel();
+    }
+
 
     @Override
     public void onSearchStateChanged(boolean enabled) {
@@ -60,7 +77,8 @@ public class MainActivity extends AppCompatActivity implements MainView, Materia
 
     @Override
     public void onSearchConfirmed(CharSequence text) {
-        Toast.makeText(this,"Searching"+text,Toast.LENGTH_SHORT).show();
+        if (String.valueOf(text).equals("")) loadData();
+        else loadData(String.valueOf(text));
     }
 
     @Override
@@ -76,7 +94,7 @@ public class MainActivity extends AppCompatActivity implements MainView, Materia
     }
 
 
-    private void loadFakeData() {
+    /*private void loadFakeData() {
         list.clear();
         for (int i =0; i <= 10; i++){
             ResultsItem perItem = new ResultsItem();
@@ -87,8 +105,36 @@ public class MainActivity extends AppCompatActivity implements MainView, Materia
             list.add(perItem);
         }
         searchAdapter.replaceAll(list);
+    }*/
+
+    private void loadData() {
+        getSupportActionBar().setSubtitle("");
+
+        apiCall = apiResponder.getService().getPopularMovie(resumePage);
+        apiCall.enqueue(new Callback<SearchModel>() {
+            @Override
+            public void onResponse(Call<SearchModel> call, Response<SearchModel> response) {
+                if (response.isSuccessful()){
+                    List<ResultsItem> items = response.body().getResults();
+
+                    if (resumePage > 1) searchAdapter.updateData(items);
+                    else searchAdapter.replaceAll(items);
+                }else loadFailed();
+            }
+
+            @Override
+            public void onFailure(Call<SearchModel> call, Throwable t) {
+                loadFailed();
+            }
+        });
     }
 
+    private void loadData(String movie_title){
+        getSupportActionBar().setSubtitle("Searching: "+ movie_title);
+        searchAdapter.clearAll();
+    }
 
-
+    private void loadFailed() {
+        Toast.makeText(MainActivity.this,"Sorry, load data failure",Toast.LENGTH_SHORT).show();
+    }
 }
