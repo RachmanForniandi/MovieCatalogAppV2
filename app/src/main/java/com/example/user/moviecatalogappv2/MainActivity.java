@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.Toolbar;
 import android.widget.Button;
 import android.widget.EditText;
 
@@ -33,6 +34,9 @@ public class MainActivity extends AppCompatActivity implements MainView{
     @BindView(R.id.rcView_movieListItem)
     RecyclerView rcViewMovieList;
 
+    @BindView(R.id.toolbar)
+    Toolbar toolbar;
+
     private SearchAdapter searchAdapter;
     private List<ResultsItem> list = new ArrayList<>();
 
@@ -41,6 +45,7 @@ public class MainActivity extends AppCompatActivity implements MainView{
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         ButterKnife.bind(this);
+        setSupportActionBar(toolbar);
 
         MainPresenter presenter = new MainPresenter(this);
 
