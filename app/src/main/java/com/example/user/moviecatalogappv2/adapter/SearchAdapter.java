@@ -8,6 +8,9 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.request.RequestOptions;
+import com.example.user.moviecatalogappv2.BuildConfig;
 import com.example.user.moviecatalogappv2.MVP_Core.model.search_data.ResultsItem;
 import com.example.user.moviecatalogappv2.R;
 
@@ -71,6 +74,14 @@ public class SearchAdapter extends RecyclerView.Adapter<SearchAdapter.SearchView
             lblTextTitle.setText(item.getTitle());
             lblTextOverview.setText(item.getOverview());
             lblTextReleaseDate.setText(item.getReleaseDate());
+            Glide.with(itemView.getContext())
+                    .load(BuildConfig.BASE_URL_IMAGE+"w45"+item.getPosterPath())
+                    .apply(new RequestOptions()
+                        .placeholder(R.drawable.sampleholder)
+                        .centerCrop())
+                    .into(imgPoster);
+
+
         }
     }
 
