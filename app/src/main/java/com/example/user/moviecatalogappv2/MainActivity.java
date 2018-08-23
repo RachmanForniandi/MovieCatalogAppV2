@@ -54,6 +54,7 @@ public class MainActivity extends AppCompatActivity implements MainView, Materia
     private Call<SearchModel> apiCall;
     private APIResponder apiResponder;
     private int resumePage = 1;
+    private int totalPages = 1;
 
 
     @Override
@@ -74,8 +75,11 @@ public class MainActivity extends AppCompatActivity implements MainView, Materia
         MainPresenter presenter = new MainPresenter(this);
 
         buildList();
+        setupListScrollListener();
         loadData();
     }
+
+
 
     @Override
     protected void onDestroy(){
@@ -104,6 +108,7 @@ public class MainActivity extends AppCompatActivity implements MainView, Materia
     @Override
     public void onRefresh() {
         resumePage = 1;
+        totalPages = 1;
 
         swipeRefresh.setRefreshing(true);
         if (movie_title.equals(""))loadData();
@@ -140,6 +145,35 @@ public class MainActivity extends AppCompatActivity implements MainView, Materia
         }
         searchAdapter.replaceAll(list);
     }*/
+    private void setupListScrollListener() {
+        rcViewMovieList.addOnScrollListener(new RecyclerView.OnScrollListener() {
+            /**
+             * Callback method to be invoked when the RecyclerView has been scrolled. This will be
+             * called after the scroll has completed.
+             * <p>
+             * This callback will also be called if visible item range changes after a layout
+             * calculation. In that case, dx and dy will be 0.
+             *
+             * @param recyclerView The RecyclerView which scrolled.
+             * @param dx           The amount of horizontal scroll.
+             * @param dy           The amount of vertical scroll.
+             */
+            @Override
+            public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
+                super.onScrolled(recyclerView, dx, dy);
+                LinearLayoutManager layoutManager = (LinearLayoutManager)recyclerView.getLayoutManager();
+
+                int totalItems = layoutManager.getItemCount();
+                int visibleItems = layoutManager.getChildCount();
+                int pastVisibleItems = layoutManager.findFirstCompletelyVisibleItemPosition();
+
+                if (visibleItems + pastVisibleItems >= totalItems){
+                    if (resumePage <totalPages) resumePage++;
+                    startRefreshing();
+                }
+            }
+        });
+    }
 
     private void loadData() {
         getSupportActionBar().setSubtitle("");
@@ -175,9 +209,19 @@ public class MainActivity extends AppCompatActivity implements MainView, Materia
         Toast.makeText(MainActivity.this,"Sorry, load data failure",Toast.LENGTH_SHORT).show();
     }
 
+    private void startRefreshing() {
+        if (swipeRefresh.isRefreshing())return;
+        swipeRefresh.setRefreshing(true);
+
+        if (movie_title.equals(""))loadData();
+        else loadData(movie_title);
+    }
+
     private void stopRefreshing() {
         if (swipeRefresh.isRefreshing())swipeRefresh.setRefreshing(false);
     }
+
+
 
 
 
