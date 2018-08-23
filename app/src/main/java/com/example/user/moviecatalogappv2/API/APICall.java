@@ -9,4 +9,7 @@ import retrofit2.http.Query;
 public interface APICall {
     @GET("movie/popular?")
     Call<SearchModel>getPopularMovie(@Query("page")int page);
+
+    @GET("search/movie")
+    Call<SearchModel>getSearchMovie(@Query("page") int page, @Query("query")String query);
 }

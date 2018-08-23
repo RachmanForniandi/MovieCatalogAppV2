@@ -20,6 +20,7 @@ import com.example.user.moviecatalogappv2.adapter.SearchAdapter;
 import com.example.user.moviecatalogappv2.utils.DateTime;
 import com.mancj.materialsearchbar.MaterialSearchBar;
 
+import java.text.NumberFormat;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -76,7 +77,7 @@ public class MainActivity extends AppCompatActivity implements MainView, Materia
 
         buildList();
         setupListScrollListener();
-        loadData();
+        loadData("");
     }
 
 
@@ -96,8 +97,7 @@ public class MainActivity extends AppCompatActivity implements MainView, Materia
     @Override
     public void onSearchConfirmed(CharSequence text) {
         movie_title = String.valueOf(text);
-        if (movie_title.equals("")) loadData();
-        else loadData(String.valueOf(text));
+        onRefresh();
     }
 
     @Override
@@ -110,9 +110,8 @@ public class MainActivity extends AppCompatActivity implements MainView, Materia
         resumePage = 1;
         totalPages = 1;
 
-        swipeRefresh.setRefreshing(true);
-        if (movie_title.equals(""))loadData();
-        else loadData(movie_title);
+        stopRefreshing();
+        startRefreshing();
     }
 
     @Override
@@ -175,18 +174,23 @@ public class MainActivity extends AppCompatActivity implements MainView, Materia
         });
     }
 
-    private void loadData() {
+    private void loadData(final String movie_title) {
         getSupportActionBar().setSubtitle("");
 
-        apiCall = apiResponder.getService().getPopularMovie(resumePage);
+        if (movie_title.isEmpty())apiCall = apiResponder.getService().getPopularMovie(resumePage);
+        else apiCall =apiResponder.getService().getSearchMovie(resumePage,movie_title);
+
         apiCall.enqueue(new Callback<SearchModel>() {
             @Override
             public void onResponse(Call<SearchModel> call, Response<SearchModel> response) {
                 if (response.isSuccessful()){
+                    totalPages = response.body().getTotalPages();
                     List<ResultsItem> items = response.body().getResults();
+                    showResults(response.body().getTotalResults());
 
                     if (resumePage > 1) searchAdapter.updateData(items);
                     else searchAdapter.replaceAll(items);
+
                     stopRefreshing();
                 }else loadFailed();
             }
@@ -198,12 +202,6 @@ public class MainActivity extends AppCompatActivity implements MainView, Materia
         });
     }
 
-    private void loadData(String movie_title){
-        getSupportActionBar().setSubtitle("Searching: "+ movie_title);
-        searchAdapter.clearAll();
-        stopRefreshing();
-    }
-
     private void loadFailed() {
         stopRefreshing();
         Toast.makeText(MainActivity.this,"Sorry, load data failure",Toast.LENGTH_SHORT).show();
@@ -213,16 +211,22 @@ public class MainActivity extends AppCompatActivity implements MainView, Materia
         if (swipeRefresh.isRefreshing())return;
         swipeRefresh.setRefreshing(true);
 
-        if (movie_title.equals(""))loadData();
-        else loadData(movie_title);
+        loadData(movie_title);
     }
 
     private void stopRefreshing() {
         if (swipeRefresh.isRefreshing())swipeRefresh.setRefreshing(false);
     }
 
+    private void showResults(int totalResults) {
+        String results;
 
+        String formatResults = NumberFormat.getIntegerInstance().format(totalResults);
 
+        if (totalResults > 0){
+            results = "I found" + formatResults + "movie" + (totalResults > 1 ?"s" : "") + "for you :)";
+        }else results = "Sorry! I can't find " + movie_title + " everywhere :(";
 
-
+        getSupportActionBar().setSubtitle(results);
+    }
 }
