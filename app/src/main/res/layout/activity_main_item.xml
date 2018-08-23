@@ -27,7 +27,7 @@
             android:ellipsize="marquee"
             android:singleLine="true"
             android:text="@string/movie_title"
-            android:textSize="@dimen/txt_title"
+            android:textSize="@dimen/txt_heading"
             app:fontName="alanya.regular.ttf"/>
 
         <com.example.user.moviecatalogappv2.utils.CustomTextView

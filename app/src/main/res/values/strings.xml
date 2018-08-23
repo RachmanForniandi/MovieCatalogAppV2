@@ -5,6 +5,8 @@
     <string name="movie_release_date_long">Wednesday, Apr 27, 2016</string>
     <string name="movie_release_date_short">27 April 2016</string>
     <string name="movie_vote_value">8.2</string>
+    <string name="label_overview">Overview</string>
     <string name="movie_title">Captain America: Civil War</string>
     <string name="movie_overview_content">Following the events of Age of Ultron, the collective governments</string>
+    <string name="refresh_data">Refresh Movie List</string>
 </resources>

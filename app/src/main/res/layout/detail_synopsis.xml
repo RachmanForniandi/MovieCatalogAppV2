@@ -10,8 +10,8 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginBottom="@dimen/margin_spacing"
-        android:text="@string/movie_title"
-        android:textSize="@dimen/txt_heading"
+        android:text="@string/label_overview"
+        android:textSize="@dimen/txt_large"
         app:fontName="alanya.regular.ttf"/>
 
     <com.example.user.moviecatalogappv2.utils.CustomTextView

@@ -5,9 +5,11 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.PopupMenu;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 
+import android.view.MenuItem;
 import android.widget.Toast;
 import com.example.user.moviecatalogappv2.API.APIResponder;
 import com.example.user.moviecatalogappv2.MVP_Core.MainPresenter;
@@ -30,7 +32,8 @@ import retrofit2.Response;
 
 import static android.support.v7.widget.DividerItemDecoration.VERTICAL;
 
-public class MainActivity extends AppCompatActivity implements MainView, MaterialSearchBar.OnSearchActionListener, SwipeRefreshLayout.OnRefreshListener {
+public class MainActivity extends AppCompatActivity implements MainView, MaterialSearchBar.OnSearchActionListener, SwipeRefreshLayout.OnRefreshListener ,
+        PopupMenu.OnMenuItemClickListener{
 
     @BindView(R.id.rcView_movieListItem)
     RecyclerView rcViewMovieList;
@@ -53,19 +56,19 @@ public class MainActivity extends AppCompatActivity implements MainView, Materia
     private int resumePage = 1;
 
 
-
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
         ButterKnife.bind(this);
         setSupportActionBar(toolbar);
         searchBar.setOnSearchActionListener(this);
         swipeRefresh.setOnRefreshListener(this);
 
+        searchBar.inflateMenu(R.menu.main_menu);
+        searchBar.getMenu().setOnMenuItemClickListener(this);
 
-        
         apiResponder = new APIResponder();
 
         MainPresenter presenter = new MainPresenter(this);
@@ -101,10 +104,21 @@ public class MainActivity extends AppCompatActivity implements MainView, Materia
     @Override
     public void onRefresh() {
         resumePage = 1;
+
+        swipeRefresh.setRefreshing(true);
         if (movie_title.equals(""))loadData();
         else loadData(movie_title);
     }
 
+    @Override
+    public boolean onMenuItemClick(MenuItem item) {
+        switch (item.getItemId()){
+            case R.id.refresh_cmd:
+                onRefresh();
+                break;
+        }
+        return false;
+    }
 
     private void buildList() {
         searchAdapter = new SearchAdapter();
@@ -156,8 +170,6 @@ public class MainActivity extends AppCompatActivity implements MainView, Materia
         stopRefreshing();
     }
 
-
-
     private void loadFailed() {
         stopRefreshing();
         Toast.makeText(MainActivity.this,"Sorry, load data failure",Toast.LENGTH_SHORT).show();
@@ -166,6 +178,7 @@ public class MainActivity extends AppCompatActivity implements MainView, Materia
     private void stopRefreshing() {
         if (swipeRefresh.isRefreshing())swipeRefresh.setRefreshing(false);
     }
+
 
 
 }
