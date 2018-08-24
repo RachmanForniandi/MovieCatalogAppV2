@@ -1,5 +1,6 @@
 package com.example.user.moviecatalogappv2.API;
 
+import com.example.user.moviecatalogappv2.MVP_Core.model.detail_data.DetailModel;
 import com.example.user.moviecatalogappv2.MVP_Core.model.search_data.SearchModel;
 
 import retrofit2.Call;
@@ -12,4 +13,7 @@ public interface APICall {
 
     @GET("search/movie")
     Call<SearchModel>getSearchMovie(@Query("page") int page, @Query("query")String query);
+
+    @GET("movie/{movie_id}")
+    Call<DetailModel>getDetailMovie(@Query("movie_id") String movie_id);
 }

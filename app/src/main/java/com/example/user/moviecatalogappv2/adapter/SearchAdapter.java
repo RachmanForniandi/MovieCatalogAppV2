@@ -84,7 +84,7 @@ public class SearchAdapter extends RecyclerView.Adapter<SearchAdapter.SearchView
         }
 
 
-        public void bind(ResultsItem item) {
+        public void bind(final ResultsItem item) {
             lblTextTitle.setText(item.getTitle());
             lblTextOverview.setText(item.getOverview());
             lblTextReleaseDate.setText(DateTime.getLongDate(item.getReleaseDate()));
@@ -99,6 +99,7 @@ public class SearchAdapter extends RecyclerView.Adapter<SearchAdapter.SearchView
                 @Override
                 public void onClick(View v) {
                     Intent toDetail = new Intent(itemView.getContext(), DetailActivity.class);
+                    toDetail.putExtra(DetailActivity.MOVIE_ID, String.valueOf(item.getId()));
                     itemView.getContext().startActivity(toDetail);
                 }
             });

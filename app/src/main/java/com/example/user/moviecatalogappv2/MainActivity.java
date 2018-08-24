@@ -204,7 +204,7 @@ public class MainActivity extends AppCompatActivity implements MainView, Materia
 
     private void loadFailed() {
         stopRefreshing();
-        Toast.makeText(MainActivity.this,"Sorry, load data failure",Toast.LENGTH_SHORT).show();
+        Toast.makeText(MainActivity.this,"Failed to load data.\n Please check your Internet connections!", Toast.LENGTH_SHORT).show();
     }
 
     private void startRefreshing() {
@@ -224,7 +224,7 @@ public class MainActivity extends AppCompatActivity implements MainView, Materia
         String formatResults = NumberFormat.getIntegerInstance().format(totalResults);
 
         if (totalResults > 0){
-            results = "I found" + formatResults + "movie" + (totalResults > 1 ?"s" : "") + "for you :)";
+            results = "I found" + formatResults + " movie" + (totalResults > 1 ? "s" : "") + " for you :)";
         }else results = "Sorry! I can't find " + movie_title + " everywhere :(";
 
         getSupportActionBar().setSubtitle(results);
