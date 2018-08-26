@@ -13,6 +13,7 @@ import com.example.user.moviecatalogappv2.API.APIResponder;
 import com.example.user.moviecatalogappv2.MVP_Core.model.detail_data.DetailModel;
 import com.example.user.moviecatalogappv2.utils.DateTime;
 
+import java.text.NumberFormat;
 import java.util.List;
 
 import butterknife.BindView;
@@ -32,8 +33,8 @@ public class DetailActivity extends AppCompatActivity {
     @BindView(R.id.asBackDrop)
     ImageView backdropImg;
 
-    @BindView(R.id.img_poster_detail_info)
-    ImageView imgPosterDetailInfo;
+    @BindView(R.id.img_poster_detail)
+    ImageView imgPosterDetail;
 
     @BindView(R.id.txtView_release_date_detail)
     TextView txtViewReleaseDateDetail;
@@ -41,34 +42,59 @@ public class DetailActivity extends AppCompatActivity {
     @BindView(R.id.txtView_vote_score)
     TextView txtViewVoteScore;
 
+    @BindView(R.id.txtView_genres)
+    TextView txtViewGenres;
+
     @BindView(R.id.txtView_overview_detail)
-    TextView txtViewOverviewDetail;
+    TextView txtViewOverViewDetail;
+
+    @BindView(R.id.img_poster_belongs)
+    ImageView imgPosterBelongs;
+
+    @BindView(R.id.txtView_title_belongs)
+    TextView txtViewTitleBelongs;
+
+    @BindView(R.id.txtView_budget)
+    TextView txtViewBudget;
+
+    @BindView(R.id.txtView_revenue)
+    TextView txtViewRevenue;
+
+    @BindView(R.id.txtView_companies)
+    TextView txtViewCompanies;
+
+    @BindView(R.id.txtView_countries)
+    TextView txtViewCountries;
 
     @BindViews({
-            R.id.star1,
-            R.id.star2,
-            R.id.star3,
-            R.id.star4,
-            R.id.star5
+            R.id.rating_star1,
+            R.id.rating_star2,
+            R.id.rating_star3,
+            R.id.rating_star4,
+            R.id.rating_star5
     })
     List<ImageView>rating_vote;
 
     private Call<DetailModel> apiCall;
-    private APIResponder apiResponder;
+    private APIResponder apiResponder = new APIResponder();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_detail);
 
-        apiResponder = new APIResponder();
-
-        String movie_id = getIntent().getStringExtra(MOVIE_ID);
-        loadDataDetail(movie_id);
-
         ButterKnife.bind(this);
         setSupportActionBar(toolbarDetail);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+
+        String movie_id = getIntent().getStringExtra(MOVIE_ID);
+        loadDataDetail(movie_id);
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        if (apiCall != null)apiCall.cancel();
     }
 
     private void loadDataDetail(String movie_id) {
@@ -79,24 +105,61 @@ public class DetailActivity extends AppCompatActivity {
                 if (response.isSuccessful()){
                     DetailModel perItem = response.body();
 
-                    getSupportActionBar().setTitle(perItem.getTitle());
-
                     Glide.with(DetailActivity.this)
                             .load(BuildConfig.BASE_URL_IMAGE + "w185" + perItem.getBackdropPath())
-                            .apply(new RequestOptions().centerCrop())
+                            .apply(new RequestOptions()
+                                    .placeholder(R.drawable.sampleholder)
+                                    .centerCrop())
                             .into(backdropImg);
 
                     Glide.with(DetailActivity.this)
-                            .load(BuildConfig.BASE_URL_IMAGE + "w154" + perItem.getBackdropPath())
+                            .load(BuildConfig.BASE_URL_IMAGE + "w154" + perItem.getPosterPath())
                             .apply(new RequestOptions()
                                     .placeholder(R.drawable.sampleholder)
                                     .centerCrop()
                             )
-                            .into(backdropImg);
+                            .into(imgPosterDetail);
 
                     txtViewReleaseDateDetail.setText(DateTime.getLongDate(perItem.getReleaseDate()));
                     txtViewVoteScore.setText(String.valueOf(perItem.getVoteAverage()));
-                    txtViewOverviewDetail.setText(perItem.getOverview());
+
+                    int size = 0;
+
+                    String genres = "";
+                    size = perItem.getGenres().size();
+                    for (int i=0; i < size; i++){
+                        genres += "√ " + perItem.getGenres().get(i).getName()+(i + 1 < size ? "\n" : "");
+                    }
+                    txtViewGenres.setText(genres);
+                    txtViewOverViewDetail.setText(perItem.getOverview());
+
+                    if (perItem.getBelongsToCollection()!= null){
+                        Glide.with(DetailActivity.this)
+                                .load(BuildConfig.BASE_URL_IMAGE + "w92" + perItem.getBelongsToCollection().getPosterPath())
+                                    .apply(new RequestOptions()
+                                    .placeholder(R.drawable.sampleholder)
+                                    .centerCrop()
+                                ).into(imgPosterBelongs);
+
+                        txtViewTitleBelongs.setText(perItem.getBelongsToCollection().getName());
+                    }
+
+                    txtViewBudget.setText("$ " + NumberFormat.getIntegerInstance().format(perItem.getBudget()));
+                    txtViewRevenue.setText("$ " + NumberFormat.getIntegerInstance().format(perItem.getRevenue()));
+
+                    String companies = "";
+                    size = perItem.getProductionCompanies().size();
+                    for (int i = 0; i < size; i++){
+                        companies += "√ " + perItem.getProductionCompanies().get(i).getName()+(i + 1 < size ? "\n" : "");
+                    }
+                    txtViewCompanies.setText(companies);
+
+                    String countries = "";
+                    size = perItem.getProductionCountries().size();
+                    for (int i = 0; i < size; i++){
+                        countries += "√ " + perItem.getProductionCountries().get(i).getName()+(i + 1 < size ? "\n" : "");
+                    }
+                    txtViewCountries.setText(countries);
 
                     double userRating = perItem.getVoteAverage() / 2;
                     int integerPart = (int)userRating;
@@ -119,6 +182,6 @@ public class DetailActivity extends AppCompatActivity {
     }
 
     private void loadFailed() {
-        Toast.makeText(DetailActivity.this, "Cannot fetch detail movie.\n Please check your Internet connections!", Toast.LENGTH_SHORT).show();
+        Toast.makeText(DetailActivity.this, "Cannot fetch detail movie.\nPlease check your Internet connections!", Toast.LENGTH_SHORT).show();
     }
 }

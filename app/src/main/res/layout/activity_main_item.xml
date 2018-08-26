@@ -11,8 +11,7 @@
         android:id="@+id/img_poster"
         android:layout_width="45dp"
         android:layout_height="68dp"
-        android:scaleType="centerCrop"
-        android:src="@drawable/sampleholder"/>
+        android:scaleType="centerCrop"/>
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -26,7 +25,6 @@
             android:layout_height="wrap_content"
             android:ellipsize="marquee"
             android:singleLine="true"
-            android:text="@string/movie_title"
             android:textSize="@dimen/txt_heading"
             app:fontName="alanya.regular.ttf"/>
 
@@ -36,7 +34,6 @@
             android:layout_height="wrap_content"
             android:ellipsize="marquee"
             android:singleLine="true"
-            android:text="@string/movie_overview_content"
             android:textSize="@dimen/txt_subheading"
             app:fontName="roboto-condensed.light.ttf"/>
 
@@ -45,7 +42,6 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/margin_spacing"
-            android:text="@string/movie_release_date_long"
             android:textSize="@dimen/txt_subheading"/>
 
     </LinearLayout>

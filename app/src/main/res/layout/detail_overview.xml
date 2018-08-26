@@ -3,16 +3,14 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
     android:orientation="vertical"
-    android:padding="@dimen/margin_clear_space"
-    tools:showIn="@layout/activity_detail">
+    android:padding="@dimen/margin_clear_space">
 
     <com.example.user.moviecatalogappv2.utils.CustomTextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginBottom="@dimen/margin_spacing"
-        android:text="@string/label_title_overview"
+        android:text="@string/label_txt_overview"
         android:textSize="@dimen/txt_large"
         app:fontName="alanya.regular.ttf"/>
 
@@ -20,7 +18,6 @@
         android:id="@+id/txtView_overview_detail"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="@string/movie_overview_content"
         android:textSize="@dimen/txt_subheading"
         app:fontName="roboto-condensed.light.ttf"/>
 

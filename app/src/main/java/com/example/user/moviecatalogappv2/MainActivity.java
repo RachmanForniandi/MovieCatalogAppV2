@@ -51,9 +51,10 @@ public class MainActivity extends AppCompatActivity implements MainView, Materia
     private SearchAdapter searchAdapter;
     private List<ResultsItem> list = new ArrayList<>();
 
-    private String movie_title ="";
     private Call<SearchModel> apiCall;
-    private APIResponder apiResponder;
+    private APIResponder apiResponder = new APIResponder();
+
+    private String movie_title ="";
     private int resumePage = 1;
     private int totalPages = 1;
 
@@ -71,16 +72,12 @@ public class MainActivity extends AppCompatActivity implements MainView, Materia
         searchBar.inflateMenu(R.menu.main_menu);
         searchBar.getMenu().setOnMenuItemClickListener(this);
 
-        apiResponder = new APIResponder();
-
         MainPresenter presenter = new MainPresenter(this);
 
         buildList();
         setupListScrollListener();
         loadData("");
     }
-
-
 
     @Override
     protected void onDestroy(){
@@ -204,7 +201,7 @@ public class MainActivity extends AppCompatActivity implements MainView, Materia
 
     private void loadFailed() {
         stopRefreshing();
-        Toast.makeText(MainActivity.this,"Failed to load data.\n Please check your Internet connections!", Toast.LENGTH_SHORT).show();
+        Toast.makeText(MainActivity.this,"Failed to load data.\nPlease check your Internet connections!", Toast.LENGTH_SHORT).show();
     }
 
     private void startRefreshing() {
