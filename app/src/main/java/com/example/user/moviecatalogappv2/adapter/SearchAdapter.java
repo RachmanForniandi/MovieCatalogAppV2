@@ -1,7 +1,10 @@
 package com.example.user.moviecatalogappv2.adapter;
 
+import android.app.Activity;
 import android.content.Intent;
+import android.os.Build;
 import android.support.annotation.NonNull;
+import android.support.v4.app.ActivityOptionsCompat;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -100,7 +103,11 @@ public class SearchAdapter extends RecyclerView.Adapter<SearchAdapter.SearchView
                 public void onClick(View v) {
                     Intent toDetail = new Intent(itemView.getContext(), DetailActivity.class);
                     toDetail.putExtra(DetailActivity.MOVIE_ID, String.valueOf(item.getId()));
-                    itemView.getContext().startActivity(toDetail);
+
+                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP){
+                        ActivityOptionsCompat optionsCompat = ActivityOptionsCompat.makeSceneTransitionAnimation((Activity)itemView.getContext(),imgPoster,"asPoster");
+                        itemView.getContext().startActivity(toDetail,optionsCompat.toBundle());
+                    }else itemView.getContext().startActivity(toDetail);
                 }
             });
         }

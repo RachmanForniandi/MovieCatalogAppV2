@@ -17,7 +17,8 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical"
-        android:paddingLeft="@dimen/margin_spacing">
+        android:paddingLeft="@dimen/margin_spacing"
+        android:transitionName="asPoster">
 
         <com.example.user.moviecatalogappv2.utils.CustomTextView
             android:id="@+id/txtView_title"

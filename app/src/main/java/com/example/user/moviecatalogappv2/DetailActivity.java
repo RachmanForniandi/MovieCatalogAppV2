@@ -1,5 +1,6 @@
 package com.example.user.moviecatalogappv2;
 
+import android.support.design.widget.CollapsingToolbarLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
@@ -30,11 +31,17 @@ public class DetailActivity extends AppCompatActivity {
     @BindView(R.id.toolbar_detail)
     Toolbar toolbarDetail;
 
+    @BindView(R.id.collapsing_toolbar_detail)
+    CollapsingToolbarLayout collapsingToolbarLayoutDetail;
+
     @BindView(R.id.asBackDrop)
     ImageView backdropImg;
 
     @BindView(R.id.img_poster_detail)
     ImageView imgPosterDetail;
+
+    @BindView(R.id.txtView_title)
+    TextView txtViewTitle;
 
     @BindView(R.id.txtView_release_date_detail)
     TextView txtViewReleaseDateDetail;
@@ -87,6 +94,8 @@ public class DetailActivity extends AppCompatActivity {
         setSupportActionBar(toolbarDetail);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
+        collapsingToolbarLayoutDetail.setExpandedTitleColor(getResources().getColor(android.R.color.transparent));
+
         String movie_id = getIntent().getStringExtra(MOVIE_ID);
         loadDataDetail(movie_id);
     }
@@ -104,6 +113,8 @@ public class DetailActivity extends AppCompatActivity {
             public void onResponse(Call<DetailModel> call, Response<DetailModel> response) {
                 if (response.isSuccessful()){
                     DetailModel perItem = response.body();
+
+                    txtViewTitle.setText(perItem.getTitle());
 
                     Glide.with(DetailActivity.this)
                             .load(BuildConfig.BASE_URL_IMAGE + "w185" + perItem.getBackdropPath())
