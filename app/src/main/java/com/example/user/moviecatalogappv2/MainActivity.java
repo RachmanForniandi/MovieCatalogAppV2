@@ -76,7 +76,7 @@ public class MainActivity extends AppCompatActivity implements MainView, Materia
 
         buildList();
         setupListScrollListener();
-        loadData("");
+        startRefreshing();
     }
 
     @Override

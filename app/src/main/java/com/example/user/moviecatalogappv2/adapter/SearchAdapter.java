@@ -3,7 +3,6 @@ package com.example.user.moviecatalogappv2.adapter;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Build;
-import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityOptionsCompat;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -20,6 +19,7 @@ import com.example.user.moviecatalogappv2.MVP_Core.model.search_data.ResultsItem
 import com.example.user.moviecatalogappv2.R;
 import com.example.user.moviecatalogappv2.utils.CustomTextView;
 import com.example.user.moviecatalogappv2.utils.DateTime;
+import com.google.gson.Gson;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -102,7 +102,7 @@ public class SearchAdapter extends RecyclerView.Adapter<SearchAdapter.SearchView
                 @Override
                 public void onClick(View v) {
                     Intent toDetail = new Intent(itemView.getContext(), DetailActivity.class);
-                    toDetail.putExtra(DetailActivity.MOVIE_ID, String.valueOf(item.getId()));
+                    toDetail.putExtra(DetailActivity.MOVIE_ITEM, new Gson().toJson(item));
 
                     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP){
                         ActivityOptionsCompat optionsCompat = ActivityOptionsCompat.makeSceneTransitionAnimation((Activity)itemView.getContext(),imgPoster,"asPoster");

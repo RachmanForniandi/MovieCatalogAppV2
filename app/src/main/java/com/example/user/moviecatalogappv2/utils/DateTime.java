@@ -23,10 +23,10 @@ public class DateTime {
     }
 
     public static String getShortDate(String date){
-        return formatDate(date,"dd MMMMM yyyy");
+        return formatDate(date,"dd MMMM yyyy");
     }
 
     public static String getLongDate(String date){
-        return formatDate(date,"EEEE,MMM d,yyyy");
+        return formatDate(date,"EEEE, MMM d, yyyy");
     }
 }

@@ -9,10 +9,11 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
-import com.bumptech.glide.request.RequestOptions;
 import com.example.user.moviecatalogappv2.API.APIResponder;
 import com.example.user.moviecatalogappv2.MVP_Core.model.detail_data.DetailModel;
+import com.example.user.moviecatalogappv2.MVP_Core.model.search_data.ResultsItem;
 import com.example.user.moviecatalogappv2.utils.DateTime;
+import com.google.gson.Gson;
 
 import java.text.NumberFormat;
 import java.util.List;
@@ -26,7 +27,7 @@ import retrofit2.Response;
 
 public class DetailActivity extends AppCompatActivity {
 
-    public static final String MOVIE_ID = "movie_id";
+    public static final String MOVIE_ITEM = "movie_item";
 
     @BindView(R.id.toolbar_detail)
     Toolbar toolbarDetail;
@@ -84,6 +85,7 @@ public class DetailActivity extends AppCompatActivity {
 
     private Call<DetailModel> apiCall;
     private APIResponder apiResponder = new APIResponder();
+    private Gson gson = new Gson();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -96,8 +98,8 @@ public class DetailActivity extends AppCompatActivity {
 
         collapsingToolbarLayoutDetail.setExpandedTitleColor(getResources().getColor(android.R.color.transparent));
 
-        String movie_id = getIntent().getStringExtra(MOVIE_ID);
-        loadDataDetail(movie_id);
+        String movie_item = getIntent().getStringExtra(MOVIE_ITEM);
+        loadDataDetail(movie_item);
     }
 
     @Override
@@ -106,33 +108,44 @@ public class DetailActivity extends AppCompatActivity {
         if (apiCall != null)apiCall.cancel();
     }
 
-    private void loadDataDetail(String movie_id) {
-        apiCall = apiResponder.getService().getDetailMovie(movie_id);
+    private void loadDataDetail(String movie_item) {
+        ResultsItem perItem = gson.fromJson(movie_item, ResultsItem.class);
+        loadDataDetailFromServer(String.valueOf(perItem.getId()));
+
+        getSupportActionBar().setTitle(perItem.getTitle());
+        txtViewTitle.setText(perItem.getTitle());
+
+        Glide.with(DetailActivity.this)
+                .load(BuildConfig.BASE_URL_IMAGE + "w185" + perItem.getBackdropPath())
+                .into(backdropImg);
+
+        Glide.with(DetailActivity.this)
+                .load(BuildConfig.BASE_URL_IMAGE + "w154" + perItem.getPosterPath())
+                .into(imgPosterDetail);
+
+        txtViewReleaseDateDetail.setText(DateTime.getLongDate(perItem.getReleaseDate()));
+        txtViewVoteScore.setText(String.valueOf(perItem.getVoteAverage()));
+        txtViewOverViewDetail.setText(perItem.getOverview());
+
+        double userRating = perItem.getVoteAverage() / 2;
+        int integerPart = (int)userRating;
+
+        for (int i = 0; i < integerPart; i++){
+            rating_vote.get(i).setImageResource(R.drawable.ic_star_black_24dp);
+        }
+
+        if (Math.round(userRating) > integerPart){
+            rating_vote.get(integerPart).setImageResource(R.drawable.ic_star_half_black_24dp);
+        }
+    }
+
+    private void loadDataDetailFromServer(String movie_item) {
+        apiCall = apiResponder.getService().getDetailMovie(movie_item);
         apiCall.enqueue(new Callback<DetailModel>() {
             @Override
             public void onResponse(Call<DetailModel> call, Response<DetailModel> response) {
                 if (response.isSuccessful()){
                     DetailModel perItem = response.body();
-
-                    txtViewTitle.setText(perItem.getTitle());
-
-                    Glide.with(DetailActivity.this)
-                            .load(BuildConfig.BASE_URL_IMAGE + "w185" + perItem.getBackdropPath())
-                            .apply(new RequestOptions()
-                                    .placeholder(R.drawable.sampleholder)
-                                    .centerCrop())
-                            .into(backdropImg);
-
-                    Glide.with(DetailActivity.this)
-                            .load(BuildConfig.BASE_URL_IMAGE + "w154" + perItem.getPosterPath())
-                            .apply(new RequestOptions()
-                                    .placeholder(R.drawable.sampleholder)
-                                    .centerCrop()
-                            )
-                            .into(imgPosterDetail);
-
-                    txtViewReleaseDateDetail.setText(DateTime.getLongDate(perItem.getReleaseDate()));
-                    txtViewVoteScore.setText(String.valueOf(perItem.getVoteAverage()));
 
                     int size = 0;
 
@@ -142,15 +155,11 @@ public class DetailActivity extends AppCompatActivity {
                         genres += "√ " + perItem.getGenres().get(i).getName()+(i + 1 < size ? "\n" : "");
                     }
                     txtViewGenres.setText(genres);
-                    txtViewOverViewDetail.setText(perItem.getOverview());
 
                     if (perItem.getBelongsToCollection()!= null){
                         Glide.with(DetailActivity.this)
                                 .load(BuildConfig.BASE_URL_IMAGE + "w92" + perItem.getBelongsToCollection().getPosterPath())
-                                    .apply(new RequestOptions()
-                                    .placeholder(R.drawable.sampleholder)
-                                    .centerCrop()
-                                ).into(imgPosterBelongs);
+                                .into(imgPosterBelongs);
 
                         txtViewTitleBelongs.setText(perItem.getBelongsToCollection().getName());
                     }
@@ -171,17 +180,6 @@ public class DetailActivity extends AppCompatActivity {
                         countries += "√ " + perItem.getProductionCountries().get(i).getName()+(i + 1 < size ? "\n" : "");
                     }
                     txtViewCountries.setText(countries);
-
-                    double userRating = perItem.getVoteAverage() / 2;
-                    int integerPart = (int)userRating;
-
-                    for (int i = 0; i < integerPart; i++){
-                        rating_vote.get(i).setImageResource(R.drawable.ic_star_black_24dp);
-                    }
-
-                    if (Math.round(userRating) > integerPart){
-                        rating_vote.get(integerPart).setImageResource(R.drawable.ic_star_half_black_24dp);
-                    }
                 }else loadFailed();
             }
 
