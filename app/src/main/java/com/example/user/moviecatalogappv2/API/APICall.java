@@ -5,9 +5,11 @@ import com.example.user.moviecatalogappv2.MVP_Core.model.search_data.SearchModel
 
 import retrofit2.Call;
 import retrofit2.http.GET;
+import retrofit2.http.Path;
 import retrofit2.http.Query;
 
-public interface APICall {
+public interface APICall{
+
     @GET("movie/popular?")
     Call<SearchModel>getPopularMovie(@Query("page")int page);
 
@@ -15,5 +17,5 @@ public interface APICall {
     Call<SearchModel>getSearchMovie(@Query("page") int page, @Query("query")String query);
 
     @GET("movie/{movie_id}")
-    Call<DetailModel>getDetailMovie(@Query("movie_id") String movie_id);
+    Call<DetailModel>getDetailMovie(@Path("movie_id") String movie_id);
 }

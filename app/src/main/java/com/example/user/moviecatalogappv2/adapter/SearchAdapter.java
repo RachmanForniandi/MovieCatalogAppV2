@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.content.Intent;
 import android.os.Build;
 import android.support.v4.app.ActivityOptionsCompat;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -97,9 +98,8 @@ public class SearchAdapter extends RecyclerView.Adapter<SearchAdapter.SearchView
             lblTextReleaseDate.setText(DateTime.getLongDate(item.getReleaseDate()));
             Glide.with(itemView.getContext())
                     .load(BuildConfig.BASE_URL_IMAGE + "w45" +item.getPosterPath())
-                    .apply(new RequestOptions()
-                        .placeholder(R.drawable.newsampleholder)
-                        .centerCrop())
+                    .apply(new RequestOptions().placeholder(ContextCompat.getDrawable((itemView.getContext()),R.drawable.ic_image_black_24dp))
+                                    .error(ContextCompat.getDrawable((itemView.getContext()),R.drawable.ic_broken_image_black_24dp)))
                     .into(imgPoster);
 
             itemView.setOnClickListener(new View.OnClickListener() {

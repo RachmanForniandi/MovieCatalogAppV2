@@ -11,8 +11,7 @@
         android:id="@+id/img_poster"
         android:layout_width="45dp"
         android:layout_height="68dp"
-        android:scaleType="centerCrop"
-        android:src="@drawable/newsampleholder"/>
+        android:scaleType="centerCrop"/>
 
     <LinearLayout
         android:layout_width="match_parent"

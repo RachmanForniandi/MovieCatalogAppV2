@@ -9,6 +9,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
+import com.bumptech.glide.request.RequestOptions;
 import com.example.user.moviecatalogappv2.API.APIResponder;
 import com.example.user.moviecatalogappv2.MVP_Core.model.detail_data.DetailModel;
 import com.example.user.moviecatalogappv2.MVP_Core.model.search_data.ResultsItem;
@@ -117,10 +118,12 @@ public class DetailActivity extends AppCompatActivity {
 
         Glide.with(DetailActivity.this)
                 .load(BuildConfig.BASE_URL_IMAGE + "w185" + perItem.getBackdropPath())
+                .apply(new RequestOptions().placeholder(R.drawable.ic_image_black_24dp).error(R.drawable.ic_broken_image_black_24dp))
                 .into(backdropImg);
 
         Glide.with(DetailActivity.this)
                 .load(BuildConfig.BASE_URL_IMAGE + "w154" + perItem.getPosterPath())
+                .apply(new RequestOptions().placeholder(R.drawable.ic_image_black_24dp).error(R.drawable.ic_broken_image_black_24dp))
                 .into(imgPosterDetail);
 
         txtViewReleaseDateDetail.setText(DateTime.getLongDate(perItem.getReleaseDate()));
@@ -159,6 +162,7 @@ public class DetailActivity extends AppCompatActivity {
                     if (perItem.getBelongsToCollection()!= null){
                         Glide.with(DetailActivity.this)
                                 .load(BuildConfig.BASE_URL_IMAGE + "w92" + perItem.getBelongsToCollection().getPosterPath())
+                                .apply(new RequestOptions().placeholder(R.drawable.ic_image_black_24dp).error(R.drawable.ic_broken_image_black_24dp))
                                 .into(imgPosterBelongs);
 
                         txtViewTitleBelongs.setText(perItem.getBelongsToCollection().getName());
