@@ -12,7 +12,7 @@
         android:layout_width="45dp"
         android:layout_height="68dp"
         android:scaleType="centerCrop"
-        android:src="@drawable/sampleholder"/>
+        android:src="@drawable/newsampleholder"/>
 
     <LinearLayout
         android:layout_width="match_parent"

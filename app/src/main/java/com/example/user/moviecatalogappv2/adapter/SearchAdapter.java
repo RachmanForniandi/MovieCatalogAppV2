@@ -64,6 +64,10 @@ public class SearchAdapter extends RecyclerView.Adapter<SearchAdapter.SearchView
         holder.bind(list.get(position));
     }
 
+    @Override
+    public int getItemCount() {
+        return list.size();
+    }
 
 
     public class SearchViewHolder extends RecyclerView.ViewHolder{
@@ -94,7 +98,7 @@ public class SearchAdapter extends RecyclerView.Adapter<SearchAdapter.SearchView
             Glide.with(itemView.getContext())
                     .load(BuildConfig.BASE_URL_IMAGE + "w45" +item.getPosterPath())
                     .apply(new RequestOptions()
-                        .placeholder(R.drawable.sampleholder)
+                        .placeholder(R.drawable.newsampleholder)
                         .centerCrop())
                     .into(imgPoster);
 
@@ -105,7 +109,8 @@ public class SearchAdapter extends RecyclerView.Adapter<SearchAdapter.SearchView
                     toDetail.putExtra(DetailActivity.MOVIE_ITEM, new Gson().toJson(item));
 
                     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP){
-                        ActivityOptionsCompat optionsCompat = ActivityOptionsCompat.makeSceneTransitionAnimation((Activity)itemView.getContext(),imgPoster,"asPoster");
+                        ActivityOptionsCompat optionsCompat = ActivityOptionsCompat
+                                .makeSceneTransitionAnimation((Activity)itemView.getContext(),imgPoster,"asPoster");
                         itemView.getContext().startActivity(toDetail,optionsCompat.toBundle());
                     }else itemView.getContext().startActivity(toDetail);
                 }
@@ -113,8 +118,5 @@ public class SearchAdapter extends RecyclerView.Adapter<SearchAdapter.SearchView
         }
     }
 
-    @Override
-    public int getItemCount() {
-        return list.size();
-    }
+
 }

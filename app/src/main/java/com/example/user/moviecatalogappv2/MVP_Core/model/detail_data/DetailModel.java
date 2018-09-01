@@ -12,8 +12,6 @@ public class DetailModel {
     @SerializedName("adult")
     private boolean adult;
 
-
-
     @SerializedName("vote_average")
     private double voteAverage;
 

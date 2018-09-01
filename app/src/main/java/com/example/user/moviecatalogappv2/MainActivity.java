@@ -33,7 +33,9 @@ import retrofit2.Response;
 
 import static android.support.v7.widget.DividerItemDecoration.VERTICAL;
 
-public class MainActivity extends AppCompatActivity implements MainView, MaterialSearchBar.OnSearchActionListener, SwipeRefreshLayout.OnRefreshListener ,
+public class MainActivity extends AppCompatActivity implements MainView,
+        MaterialSearchBar.OnSearchActionListener,
+        SwipeRefreshLayout.OnRefreshListener ,
         PopupMenu.OnMenuItemClickListener{
 
     @BindView(R.id.rcView_movieListItem)
@@ -54,7 +56,7 @@ public class MainActivity extends AppCompatActivity implements MainView, Materia
     private Call<SearchModel> apiCall;
     private APIResponder apiResponder = new APIResponder();
 
-    private String movie_title ="";
+    private String movie_title = "";
     private int resumePage = 1;
     private int totalPages = 1;
 
@@ -128,19 +130,6 @@ public class MainActivity extends AppCompatActivity implements MainView, Materia
         rcViewMovieList.setAdapter(searchAdapter);
     }
 
-
-    /*private void loadFakeData() {
-        list.clear();
-        for (int i =0; i <= 10; i++){
-            ResultsItem perItem = new ResultsItem();
-            perItem.setPosterPath("/vSNxAJTlD0r02V9sPYpOjqDZXUK.jpg");
-            perItem.setTitle("This is very very very long movie title that you can read" + i);
-            perItem.setOverview("This is very very very long movie overview that you can read" + i);
-            perItem.setReleaseDate(DateTime.getLongDate("2017-04-27"+i));
-            list.add(perItem);
-        }
-        searchAdapter.replaceAll(list);
-    }*/
     private void setupListScrollListener() {
         rcViewMovieList.addOnScrollListener(new RecyclerView.OnScrollListener() {
             /**
@@ -164,18 +153,31 @@ public class MainActivity extends AppCompatActivity implements MainView, Materia
                 int pastVisibleItems = layoutManager.findFirstCompletelyVisibleItemPosition();
 
                 if (visibleItems + pastVisibleItems >= totalItems){
-                    if (resumePage <totalPages) resumePage++;
+                    if (resumePage < totalPages) resumePage++;
                     startRefreshing();
                 }
             }
         });
     }
 
+    private void loadFakeData() {
+        list.clear();
+        for (int i =0; i <= 10; i++){
+            ResultsItem perItem = new ResultsItem();
+            perItem.setPosterPath("/vSNxAJTlD0r02V9sPYpOjqDZXUK.jpg");
+            perItem.setTitle("This is very very very long movie title that you can read" + i);
+            perItem.setOverview("This is very very very long movie overview that you can read" + i);
+            perItem.setReleaseDate(DateTime.getLongDate("2017-04-27"+i));
+            list.add(perItem);
+        }
+        searchAdapter.replaceAll(list);
+    }
+
     private void loadData(final String movie_title) {
         getSupportActionBar().setSubtitle("");
 
         if (movie_title.isEmpty())apiCall = apiResponder.getService().getPopularMovie(resumePage);
-        else apiCall =apiResponder.getService().getSearchMovie(resumePage,movie_title);
+        else apiCall = apiResponder.getService().getSearchMovie(resumePage,movie_title);
 
         apiCall.enqueue(new Callback<SearchModel>() {
             @Override

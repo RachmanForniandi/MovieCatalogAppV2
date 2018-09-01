@@ -152,7 +152,7 @@ public class DetailActivity extends AppCompatActivity {
                     String genres = "";
                     size = perItem.getGenres().size();
                     for (int i=0; i < size; i++){
-                        genres += "√ " + perItem.getGenres().get(i).getName()+(i + 1 < size ? "\n" : "");
+                        genres += "√ " + perItem.getGenres().get(i).getName() + (i + 1 < size ? "\n" : "");
                     }
                     txtViewGenres.setText(genres);
 
@@ -177,7 +177,7 @@ public class DetailActivity extends AppCompatActivity {
                     String countries = "";
                     size = perItem.getProductionCountries().size();
                     for (int i = 0; i < size; i++){
-                        countries += "√ " + perItem.getProductionCountries().get(i).getName()+(i + 1 < size ? "\n" : "");
+                        countries += "√ " + perItem.getProductionCountries().get(i).getName() + (i + 1 < size ? "\n" : "");
                     }
                     txtViewCountries.setText(countries);
                 }else loadFailed();
