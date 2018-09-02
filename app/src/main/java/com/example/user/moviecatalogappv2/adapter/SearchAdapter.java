@@ -32,6 +32,7 @@ public class SearchAdapter extends RecyclerView.Adapter<SearchAdapter.SearchView
 
     private List<ResultsItem> list = new ArrayList<>();
 
+
     public SearchAdapter(){
 
     }
@@ -85,22 +86,22 @@ public class SearchAdapter extends RecyclerView.Adapter<SearchAdapter.SearchView
         @BindView(R.id.txtView_release_date)
         TextView lblTextReleaseDate;
 
-        public SearchViewHolder (View itemView){
+        private SearchViewHolder (View itemView){
             super(itemView);
 
             ButterKnife.bind(this,itemView);
         }
 
 
-        public void bind(final ResultsItem item) {
+        private void bind(final ResultsItem item) {
             lblTextTitle.setText(item.getTitle());
             lblTextOverview.setText(item.getOverview());
             lblTextReleaseDate.setText(DateTime.getLongDate(item.getReleaseDate()));
             Glide.with(itemView.getContext())
-                    .load(BuildConfig.BASE_URL_IMAGE + "w45" +item.getPosterPath())
-                    .apply(new RequestOptions().placeholder(ContextCompat.getDrawable((itemView.getContext()),R.drawable.ic_image_black_24dp))
+                                    .load(BuildConfig.BASE_URL_IMAGE +item.getPosterPath())
+                                    .apply(new RequestOptions().placeholder(ContextCompat.getDrawable((itemView.getContext()),R.drawable.ic_image_black_24dp))
                                     .error(ContextCompat.getDrawable((itemView.getContext()),R.drawable.ic_broken_image_black_24dp)))
-                    .into(imgPoster);
+                                    .into(imgPoster);
 
             itemView.setOnClickListener(new View.OnClickListener() {
                 @Override

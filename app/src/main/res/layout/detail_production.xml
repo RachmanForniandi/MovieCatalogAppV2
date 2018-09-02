@@ -23,6 +23,7 @@
             android:id="@+id/img_poster_belongs"
             android:layout_width="90dp"
             android:layout_height="120dp"
+            android:src="@drawable/newsampleholder"
             android:scaleType="centerCrop"/>
 
         <LinearLayout
@@ -81,7 +82,7 @@
                 android:id="@+id/txtView_companies"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:textSize="@dimen/txt_heading"/>
+                android:textSize="@dimen/margin_clear_space"/>
 
             <TextView
                 android:layout_width="wrap_content"

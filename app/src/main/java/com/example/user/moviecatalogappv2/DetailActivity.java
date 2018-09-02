@@ -1,5 +1,6 @@
 package com.example.user.moviecatalogappv2;
 
+import android.content.Context;
 import android.support.design.widget.CollapsingToolbarLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -83,6 +84,7 @@ public class DetailActivity extends AppCompatActivity {
             R.id.rating_star5
     })
     List<ImageView>rating_vote;
+    private Context context = DetailActivity.this;
 
     private Call<DetailModel> apiCall;
     private APIResponder apiResponder = new APIResponder();
@@ -116,15 +118,17 @@ public class DetailActivity extends AppCompatActivity {
         getSupportActionBar().setTitle(perItem.getTitle());
         txtViewTitle.setText(perItem.getTitle());
 
-        Glide.with(DetailActivity.this)
-                .load(BuildConfig.BASE_URL_IMAGE + "w185" + perItem.getBackdropPath())
-                .apply(new RequestOptions().placeholder(R.drawable.ic_image_black_24dp).error(R.drawable.ic_broken_image_black_24dp))
-                .into(backdropImg);
+        Glide.with(context)
+                        .load(BuildConfig.BASE_URL_IMAGE + perItem.getBackdropPath())
+                        .apply(new RequestOptions().placeholder(R.drawable.ic_image_black_24dp)
+                        .error(R.drawable.ic_broken_image_black_24dp))
+                        .into(backdropImg);
 
-        Glide.with(DetailActivity.this)
-                .load(BuildConfig.BASE_URL_IMAGE + "w154" + perItem.getPosterPath())
-                .apply(new RequestOptions().placeholder(R.drawable.ic_image_black_24dp).error(R.drawable.ic_broken_image_black_24dp))
-                .into(imgPosterDetail);
+        Glide.with(context)
+                        .load(BuildConfig.BASE_URL_IMAGE + perItem.getPosterPath())
+                        .apply(new RequestOptions().placeholder(R.drawable.ic_image_black_24dp)
+                        .error(R.drawable.ic_broken_image_black_24dp))
+                        .into(imgPosterDetail);
 
         txtViewReleaseDateDetail.setText(DateTime.getLongDate(perItem.getReleaseDate()));
         txtViewVoteScore.setText(String.valueOf(perItem.getVoteAverage()));
@@ -159,11 +163,12 @@ public class DetailActivity extends AppCompatActivity {
                     }
                     txtViewGenres.setText(genres);
 
-                    if (perItem.getBelongsToCollection()!= null){
+                    if (perItem.getBelongsToCollection() != null){
                         Glide.with(DetailActivity.this)
-                                .load(BuildConfig.BASE_URL_IMAGE + "w92" + perItem.getBelongsToCollection().getPosterPath())
-                                .apply(new RequestOptions().placeholder(R.drawable.ic_image_black_24dp).error(R.drawable.ic_broken_image_black_24dp))
-                                .into(imgPosterBelongs);
+                                        .load(BuildConfig.BASE_URL_IMAGE + perItem.getBelongsToCollection().getPosterPath())
+                                        .apply(new RequestOptions().placeholder(R.drawable.ic_image_black_24dp)
+                                        .error(R.drawable.ic_broken_image_black_24dp))
+                                        .into(imgPosterBelongs);
 
                         txtViewTitleBelongs.setText(perItem.getBelongsToCollection().getName());
                     }
