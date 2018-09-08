@@ -2,6 +2,7 @@ package com.example.user.moviecatalogappv2.API;
 
 import com.example.user.moviecatalogappv2.MVP_Core.model.detail_data.DetailModel;
 import com.example.user.moviecatalogappv2.MVP_Core.model.search_data.SearchModel;
+import com.example.user.moviecatalogappv2.MVP_Core.model.upcoming_data.UpcomingModel;
 
 import retrofit2.Call;
 import retrofit2.http.GET;
@@ -20,5 +21,5 @@ public interface APICall{
     Call<DetailModel>getDetailMovie(@Path("movie_id") String movie_id);
 
     @GET("movie/upcoming")
-    Call<SearchModel>getUpcomingMovie();
+    Call<UpcomingModel>getUpcomingMovie();
 }
