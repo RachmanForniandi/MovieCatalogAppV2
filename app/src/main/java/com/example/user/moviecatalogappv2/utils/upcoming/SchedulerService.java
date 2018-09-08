@@ -11,6 +11,7 @@ import android.support.v4.content.ContextCompat;
 import android.widget.Toast;
 
 import com.example.user.moviecatalogappv2.API.APIResponder;
+import com.example.user.moviecatalogappv2.DetailActivity;
 import com.example.user.moviecatalogappv2.MVP_Core.model.upcoming_data.ResultsItem;
 import com.example.user.moviecatalogappv2.MVP_Core.model.upcoming_data.UpcomingModel;
 import com.example.user.moviecatalogappv2.MainActivity;
@@ -18,6 +19,7 @@ import com.example.user.moviecatalogappv2.R;
 import com.google.android.gms.gcm.GcmNetworkManager;
 import com.google.android.gms.gcm.GcmTaskService;
 import com.google.android.gms.gcm.TaskParams;
+import com.google.gson.Gson;
 
 import java.util.List;
 import java.util.Random;
@@ -43,11 +45,6 @@ public class SchedulerService extends GcmTaskService {
         return result;
     }
 
-    @Override
-    public void onDestroy(){
-        super.onDestroy();
-        if (apiCall != null)apiCall.cancel();
-    }
 
     private void loadData() {
         apiCall = apiResponder.getService().getUpcomingMovie();
@@ -58,11 +55,12 @@ public class SchedulerService extends GcmTaskService {
                     List<ResultsItem>items = response.body().getResults();
                     int index = new Random().nextInt(items.size());
 
+                    ResultsItem item = items.get(index);
                     String title = items.get(index).getTitle();
                     String message = items.get(index).getOverview();
                     int notificationId = 200;
 
-                    showNotification(getApplicationContext(),title,message,notificationId);
+                    showNotification(getApplicationContext(),title,message,notificationId,item);
                 }else loadFailed();
             }
 
@@ -76,15 +74,22 @@ public class SchedulerService extends GcmTaskService {
     private void loadFailed() {
         Toast.makeText(this,"Sorry Failed to load data.\\nPlease check your Internet connections!",Toast.LENGTH_SHORT).show();
     }
-    private void showNotification(Context ctx, String title, String message, int notificationId) {
+    private void showNotification(Context ctx, String title, String message, int notificationId, ResultsItem item) {
         NotificationManager notificationManager = (NotificationManager)ctx.getSystemService(Context.NOTIFICATION_SERVICE);
         Uri alarmSound = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);
+
+        Intent intent = new Intent(ctx, DetailActivity.class);
+        intent.putExtra(DetailActivity.MOVIE_ITEM, new Gson().toJson(item));
+        PendingIntent pendingIntent = PendingIntent.getActivity(ctx,notificationId,intent,PendingIntent.FLAG_UPDATE_CURRENT);
+
 
         NotificationCompat.Builder builder = new NotificationCompat.Builder(ctx)
                 .setSmallIcon(R.drawable.movie_icon)
                 .setContentTitle(title)
                 .setContentText(message)
                 .setColor(ContextCompat.getColor(ctx,android.R.color.holo_purple))
+                .setContentIntent(pendingIntent)
+                .setAutoCancel(true)
                 .setVibrate(new long[]{1200,1200,1200,1200,1200})
                 .setSound(alarmSound);
 

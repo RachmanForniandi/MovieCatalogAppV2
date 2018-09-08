@@ -104,8 +104,10 @@ public class AlarmReceiver extends BroadcastReceiver{
         calendar.set(Calendar.MINUTE,Integer.parseInt(timeArray[1]));
         calendar.set(Calendar.SECOND,0);
 
+        if (calendar.before(Calendar.getInstance()))calendar.add(Calendar.DATE,1);
+
         int uniqueCode = NOTIFICATION_ID_REPEATING;
-        PendingIntent pendingIntent = PendingIntent.getBroadcast(context,uniqueCode,intent, 0);
+        PendingIntent pendingIntent = PendingIntent.getBroadcast(context,uniqueCode,intent, PendingIntent.FLAG_UPDATE_CURRENT);
 
         alarmManager.setInexactRepeating(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), AlarmManager.INTERVAL_DAY,pendingIntent);
     }

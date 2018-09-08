@@ -16,7 +16,7 @@ public class SchedulerTask {
     public void initiatePeriodicTask(){
         Task initiateTask = new PeriodicTask.Builder()
                 .setService(SchedulerService.class)
-                .setPeriod(60)
+                .setPeriod(3 * 60 * 1000)
                 .setFlex(12)
                 .setTag(SchedulerService.TAG_TASK_UPCOMING)
                 .setPersisted(true)
