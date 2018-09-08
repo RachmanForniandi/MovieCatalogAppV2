@@ -19,6 +19,7 @@ import com.example.user.moviecatalogappv2.MVP_Core.model.search_data.SearchModel
 import com.example.user.moviecatalogappv2.adapter.SearchAdapter;
 import com.example.user.moviecatalogappv2.utils.AlarmReceiver;
 import com.example.user.moviecatalogappv2.utils.DateTime;
+import com.example.user.moviecatalogappv2.utils.upcoming.SchedulerTask;
 import com.mancj.materialsearchbar.MaterialSearchBar;
 
 import java.text.NumberFormat;
@@ -62,6 +63,7 @@ public class MainActivity extends AppCompatActivity implements MainView,
     private int totalPages = 1;
 
     private AlarmReceiver alarmReceiver = new AlarmReceiver();
+    private SchedulerTask schedulerTask;
 
 
     @Override
@@ -70,6 +72,9 @@ public class MainActivity extends AppCompatActivity implements MainView,
         setContentView(R.layout.activity_main);
 
         alarmReceiver.setRepeatingTime(this, alarmReceiver.TYPE_REPEATING,"06:00","Good morning User! Ready to pick your Up to date movies today?");
+
+        schedulerTask = new SchedulerTask(this);
+        schedulerTask.initiatePeriodicTask();
 
         ButterKnife.bind(this);
         setSupportActionBar(toolbar);
