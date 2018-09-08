@@ -6,9 +6,9 @@
 
     <application
         android:allowBackup="true"
-        android:icon="@mipmap/ic_launcher"
+        android:icon="@drawable/icon_movie_clip_256"
         android:label="@string/app_name"
-        android:roundIcon="@mipmap/ic_launcher_round"
+        android:roundIcon="@drawable/icon_movie_clip"
         android:supportsRtl="true"
         android:theme="@style/AppTheme.NoActionBar">
 
@@ -28,6 +28,10 @@
                 android:name="android.support..PARENT_ACTIVITY"
                 android:value=".MainActivity"/>
         </activity>
+
+        <receiver android:name=".utils.AlarmReceiver"
+            android:enabled="true"
+            android:exported="true"/>
 
     </application>
 

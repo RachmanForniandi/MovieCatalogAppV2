@@ -17,6 +17,7 @@ import com.example.user.moviecatalogappv2.MVP_Core.MainView;
 import com.example.user.moviecatalogappv2.MVP_Core.model.search_data.ResultsItem;
 import com.example.user.moviecatalogappv2.MVP_Core.model.search_data.SearchModel;
 import com.example.user.moviecatalogappv2.adapter.SearchAdapter;
+import com.example.user.moviecatalogappv2.utils.AlarmReceiver;
 import com.example.user.moviecatalogappv2.utils.DateTime;
 import com.mancj.materialsearchbar.MaterialSearchBar;
 
@@ -60,11 +61,15 @@ public class MainActivity extends AppCompatActivity implements MainView,
     private int resumePage = 1;
     private int totalPages = 1;
 
+    private AlarmReceiver alarmReceiver = new AlarmReceiver();
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        alarmReceiver.setRepeatingTime(this, alarmReceiver.TYPE_REPEATING,"06:00","Good morning User! Ready to pick your Up to date movies today?");
 
         ButterKnife.bind(this);
         setSupportActionBar(toolbar);
