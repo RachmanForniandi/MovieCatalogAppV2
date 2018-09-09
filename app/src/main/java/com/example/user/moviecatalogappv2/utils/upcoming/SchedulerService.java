@@ -84,10 +84,10 @@ public class SchedulerService extends GcmTaskService {
 
 
         NotificationCompat.Builder builder = new NotificationCompat.Builder(ctx)
-                .setSmallIcon(R.drawable.movie_icon)
+                .setSmallIcon(R.drawable.ic_alarm_white_24dp)
                 .setContentTitle(title)
                 .setContentText(message)
-                .setColor(ContextCompat.getColor(ctx,android.R.color.holo_purple))
+                .setColor(ContextCompat.getColor(ctx,android.R.color.holo_orange_dark))
                 .setContentIntent(pendingIntent)
                 .setAutoCancel(true)
                 .setVibrate(new long[]{1200,1200,1200,1200,1200})

@@ -54,10 +54,10 @@ public class AlarmReceiver extends BroadcastReceiver{
         PendingIntent pIntent = PendingIntent.getActivity(context,notificationId,intent,PendingIntent.FLAG_UPDATE_CURRENT);
 
         NotificationCompat.Builder builder = new NotificationCompat.Builder(context)
-                .setSmallIcon(R.drawable.movie_icon)
+                .setSmallIcon(R.drawable.ic_alarm_black_24dp)
                 .setContentTitle(title)
                 .setContentText(message)
-                .setColor(ContextCompat.getColor(context,android.R.color.holo_blue_light))
+                .setColor(ContextCompat.getColor(context,android.R.color.transparent))
                 .setContentIntent(pIntent)
                 .setAutoCancel(true)
                 .setVibrate(new long[]{1200,1200,1200,1200,1200})
